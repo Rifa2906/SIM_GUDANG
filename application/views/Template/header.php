@@ -11,6 +11,8 @@
     <script src="<?= base_url('assets'); ?>/assets/js/core/popper.min.js"></script>
     <script src="<?= base_url('assets'); ?>/assets/js/core/bootstrap.min.js"></script>
 
+
+
     <script src="<?= base_url('assets'); ?>/assets/js/plugin/jquery-validation/jquery.validate.min.js"></script>
 
     <link rel="icon" href="<?= base_url('assets'); ?>/assets/img/icon.ico" type="image/x-icon" />
@@ -31,6 +33,7 @@
             }
         });
     </script>
+
 
     <!-- CSS Files -->
     <link rel="stylesheet" href="<?= base_url('assets'); ?>/assets/css/bootstrap.min.css">

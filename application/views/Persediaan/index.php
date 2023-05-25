@@ -6,7 +6,7 @@
                     <div class="card-header">
                         <div class="d-flex align-items-center">
                             <h4 class="card-title"><?= $title; ?></h4>
-                            <button class="btn btn-primary btn-round ml-auto" data-toggle="modal" data-target="#addRowModal">
+                            <button class="btn btn-primary btn-round ml-auto" data-toggle="modal" data-target="#persediaanModal">
                                 <i class="fa fa-plus"></i>
                                 Tambah Data
                             </button>
@@ -37,20 +37,47 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Nama Barang</th>
-                                        <th>Stok</th>
+                                        <th>Nama Brand</th>
+                                        <th>Stok (Dus)</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tfoot>
                                     <tr>
                                         <th>No</th>
-                                        <th>Nama Barang</th>
-                                        <th>Stok</th>
+                                        <th>Nama Brand</th>
+                                        <th>Stok (Dus)</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </tfoot>
-                                <tbody></tbody>
+                                <tbody>
+                                    <?php
+                                    $no = 1;
+                                    foreach ($persediaan as $key => $value) { ?>
+                                        <tr>
+                                            <td><?= $no++; ?></td>
+                                            <td><?= $value['nama_brand']; ?></td>
+                                            <td><?= $value['stok']; ?></td>
+                                            <td>
+                                                <button data-toggle="modal" data-target="#persediaanModal_edit" onclick="edit(<?= $value['id_persediaan'] ?>)" class="btn btn-info btn-border btn-sm">
+                                                    <span class="btn-label">
+                                                        <i class="fas fa-pencil-alt"></i>
+                                                    </span>
+                                                </button>
+
+                                                <button onclick="Hapus(<?= $value['id_persediaan'] ?>)" class="btn btn-danger btn-border btn-sm">
+                                                    <span class="btn-label">
+                                                        <i class="fa fa-trash"></i>
+                                                    </span>
+                                                </button>
+                                            </td>
+                                        </tr>
+
+                                    <?php
+                                    }
+
+                                    ?>
+                                </tbody>
                             </table>
                         </div>
                     </div>
@@ -61,55 +88,185 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="addRowModal" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" id="persediaanModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header no-bd">
                 <h5 class="modal-title">
-                    <span class="fw-mediumbold">
-                        New</span>
-                    <span class="fw-light">
-                        Row
-                    </span>
+                    Form Tambah
                 </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <p class="small">Create a new row using this form, make sure you fill them all</p>
-                <form>
+                <form id="form-persediaan">
                     <div class="row">
                         <div class="col-sm-12">
-                            <div class="form-group form-group-default">
-                                <label>Name</label>
-                                <input id="addName" type="text" class="form-control" placeholder="fill name">
+                            <div class="form-group">
+                                <label>Nama Brand</label>
+                                <select class="form-control" id="id_barang" name="id_barang">
+                                    <option value="">Pilih brand</option>
+                                    <?php
+                                    foreach ($barang as $key => $value) { ?>
+                                        <option value="<?= $value['id_barang']; ?>"><?= $value['nama_brand']; ?></option>
+
+                                    <?php
+                                    }
+                                    ?>
+                                </select>
                             </div>
                         </div>
-                        <div class="col-md-6 pr-0">
-                            <div class="form-group form-group-default">
-                                <label>Position</label>
-                                <input id="addPosition" type="text" class="form-control" placeholder="fill position">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>Stok</label>
+                                <input type="text" class="form-control" id="stok" name="stok">
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group form-group-default">
-                                <label>Office</label>
-                                <input id="addOffice" type="text" class="form-control" placeholder="fill office">
+
+                    </div>
+
+            </div>
+            <div class="modal-footer no-bd">
+                <button type="submit" class="btn btn-primary">Tambah</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Kembali</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal edit -->
+<div class="modal fade" id="persediaanModal_edit" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header no-bd">
+                <h5 class="modal-title">
+                    Form Edit
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="form-persediaan-edit">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>Nama Brand</label>
+                                <input type="hidden" class="form-control" id="id_persediaan_edit" name="id_persediaan_edit">
+                                <select class="form-control" id="id_barang_edit" name="id_barang_edit">
+                                    <option value="">Pilih brand</option>
+                                    <?php
+                                    foreach ($barang as $key => $value) { ?>
+                                        <option value="<?= $value['id_barang']; ?>"><?= $value['nama_brand']; ?></option>
+
+                                    <?php
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>Stok</label>
+                                <input type="text" class="form-control" id="stok_edit" name="stok_edit">
                             </div>
                         </div>
                     </div>
-                </form>
+
             </div>
             <div class="modal-footer no-bd">
-                <button type="button" id="addRowButton" class="btn btn-primary">Add</button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Tambah</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Kembali</button>
             </div>
+            </form>
         </div>
     </div>
 </div>
 <script>
+    function swall(params) {
+        swal({
+            title: 'Berhasil',
+            text: ' ' + params,
+            icon: "success",
+            buttons: false,
+            timer: 1500
+        }).then((result) => {
+            location.reload();
+        });
+    }
+
+    function edit(id_persediaan) {
+        $.ajax({
+            type: 'POST',
+            url: '<?= base_url('persediaan/ambil_IdPersediaan') ?>',
+            data: {
+                id_persediaan: id_persediaan
+            },
+            dataType: 'json',
+            success: function(data) {
+                $("#id_persediaan_edit").val(data.id_persediaan);
+                $("#id_barang_edit").val(data.id_barang);
+                $("#stok_edit").val(data.stok);
+            }
+        })
+    }
+
+    function Hapus(id_persediaan) {
+        swal({
+            title: 'Apakah kamu yakin?',
+            text: "Ingin menghapus data tersebut!",
+            type: 'warning',
+            buttons: {
+                confirm: {
+                    text: 'Hapus',
+                    className: 'btn btn-success'
+                },
+                cancel: {
+                    text: 'Kembali',
+                    visible: true,
+                    className: 'btn btn-danger'
+                }
+            }
+        }).then((Delete) => {
+            if (Delete) {
+
+                $.ajax({
+                    method: "POST",
+                    url: "<?= base_url('Persediaan/hapus') ?>",
+                    dataType: "json",
+                    data: {
+                        id_persediaan: id_persediaan
+                    },
+                    success: function(data) {
+                        if (data.status == 1) {
+                            swal({
+                                title: 'Data Persediaan',
+                                text: 'Berhasil dihapus',
+                                icon: "success",
+                                buttons: false,
+                                timer: 1500
+                            }).then((result) => {
+                                location.reload();
+                            });;
+                        }
+                    }
+                })
+
+
+            } else {
+                swal.close();
+            }
+        });
+    }
+
+
+
+
     $(document).ready(function() {
+
+
         $('#basic-datatables').DataTable();
 
         $('#multi-filter-select').DataTable({
@@ -135,6 +292,97 @@
                 });
             }
         });
+
+        $("#form-persediaan").validate({
+            rules: {
+                id_barang: {
+                    required: !0
+                },
+                stok: {
+                    required: !0,
+                    number: true
+                },
+            },
+            messages: {
+                id_barang: 'Belum dipilih',
+                stok: {
+                    required: 'Tidak boleh kosong',
+                    number: 'Harus Angka'
+
+                }
+            },
+            errorClass: "error",
+            validClass: "valid",
+            submitHandler: function() {
+                id_barang = $("#id_barang").val();
+                stok = $("#stok").val();
+
+                $.ajax({
+                    method: "POST",
+                    url: "<?= base_url('Persediaan/tambah') ?>",
+                    dataType: "json",
+                    data: {
+                        id_barang: id_barang,
+                        stok: stok
+                    },
+                    success: function(data) {
+                        if (data.status == 1) {
+                            $("#persediaanModal").hide();
+                            swall('Ditambah')
+                        }
+
+                    }
+                })
+
+            }
+        })
+
+        $("#form-persediaan-edit").validate({
+            rules: {
+                id_barang_edit: {
+                    required: !0
+                },
+                stok_edit: {
+                    required: !0,
+                    number: true
+                },
+            },
+            messages: {
+                id_barang_edit: 'Belum dipilih',
+                stok_edit: {
+                    required: 'Tidak boleh kosong',
+                    number: 'Harus Angka'
+
+                }
+            },
+            errorClass: "error",
+            validClass: "valid",
+            submitHandler: function() {
+
+                id_persediaan_edit = $("#id_persediaan_edit").val();
+                id_barang_edit = $("#id_barang_edit").val();
+                stok_edit = $("#stok_edit").val();
+
+                $.ajax({
+                    method: "POST",
+                    url: "<?= base_url('Persediaan/ubah_data') ?>",
+                    dataType: "json",
+                    data: {
+                        id_persediaan_edit: id_persediaan_edit,
+                        id_barang_edit: id_barang_edit,
+                        stok_edit: stok_edit
+                    },
+                    success: function(data) {
+                        if (data.status == 1) {
+                            $("#persediaanModal_edit").hide();
+                            swall('Diubah')
+                        }
+
+                    }
+                })
+
+            }
+        })
 
 
     })

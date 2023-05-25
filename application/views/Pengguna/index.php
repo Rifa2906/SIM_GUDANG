@@ -379,8 +379,6 @@
                 }
 
             },
-            errorClass: "error",
-            validClass: "valid",
             submitHandler: function() {
 
 

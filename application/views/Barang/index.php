@@ -38,7 +38,6 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Kode Barang</th>
-                                        <th>Nama Barang</th>
                                         <th>Brand Barang</th>
                                         <th>Aksi</th>
                                     </tr>
@@ -47,12 +46,38 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Kode Barang</th>
-                                        <th>Nama Barang</th>
                                         <th>Brand Barang</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </tfoot>
-                                <tbody></tbody>
+                                <tbody>
+                                    <?php
+                                    $no = 1;
+                                    foreach ($barang as $key => $value) { ?>
+                                        <tr>
+                                            <td><?= $no++; ?></td>
+                                            <td><?= $value['kode_barang']; ?></td>
+                                            <td><?= $value['nama_brand']; ?></td>
+                                            <td>
+                                                <button data-toggle="modal" data-target="#barangModal_edit" onclick="edit(<?= $value['id_barang'] ?>)" class="btn btn-info btn-border btn-sm">
+                                                    <span class="btn-label">
+                                                        <i class="fas fa-pencil-alt"></i>
+                                                    </span>
+                                                </button>
+
+                                                <button onclick="Hapus(<?= $value['id_barang'] ?>)" class="btn btn-danger btn-border btn-sm">
+                                                    <span class="btn-label">
+                                                        <i class="fa fa-trash"></i>
+                                                    </span>
+                                                </button>
+                                            </td>
+                                        </tr>
+
+                                    <?php
+                                    }
+
+                                    ?>
+                                </tbody>
                             </table>
                         </div>
                     </div>
@@ -75,37 +100,148 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form>
+                <form id="form-barang">
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label for="email2">Email Address</label>
-                                <input type="email" class="form-control" id="email2" placeholder="Enter Email">
+                                <label>Kode Barang</label>
+                                <input type="text" class="form-control" id="kode_barang" value="<?= $kode_b; ?>" readonly>
                             </div>
                         </div>
-                        <div class="col-md-6 pr-0">
+                        <div class="col-sm-12">
                             <div class="form-group">
-                                <label for="email2">Email Address</label>
-                                <input type="email" class="form-control" id="email2" placeholder="Enter Email">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="email2">Email Address</label>
-                                <input type="email" class="form-control" id="email2" placeholder="Enter Email">
+                                <label>Nama Brand</label>
+                                <input type="text" class="form-control" id="nama_brand" name="nama_brand">
                             </div>
                         </div>
                     </div>
-                </form>
+
             </div>
             <div class="modal-footer no-bd">
-                <button type="button" id="addRowButton" class="btn btn-primary">Add</button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Tambah</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Kembali</button>
             </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal edit -->
+<div class="modal fade" id="barangModal_edit" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header no-bd">
+                <h5 class="modal-title">
+                    Form Edit
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="form-barang-edit">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <input type="hidden" class="form-control" id="id_barang_edit">
+                                <label>Kode Barang</label>
+                                <input type="text" class="form-control" id="kode_barang_edit" readonly>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>Nama Brand</label>
+                                <input type="text" class="form-control" id="nama_brand_edit" name="nama_brand_edit">
+                            </div>
+                        </div>
+                    </div>
+
+            </div>
+            <div class="modal-footer no-bd">
+                <button type="submit" class="btn btn-primary">Edit</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Kembali</button>
+            </div>
+            </form>
         </div>
     </div>
 </div>
 <script>
+    function swall(params) {
+        swal({
+            title: 'Berhasil',
+            text: ' ' + params,
+            icon: "success",
+            buttons: false,
+            timer: 1500
+        }).then((result) => {
+            location.reload();
+        });
+    }
+
+    function edit(id_barang) {
+        $.ajax({
+            type: 'POST',
+            url: '<?= base_url('Barang/ambil_IdBarang') ?>',
+            data: {
+                id_barang: id_barang
+            },
+            dataType: 'json',
+            success: function(data) {
+                $("#id_barang_edit").val(data.id_barang);
+                $("#nama_brand_edit").val(data.nama_brand);
+                $("#kode_barang_edit").val(data.kode_barang);
+            }
+        })
+    }
+
+    function Hapus(id_barang) {
+        swal({
+            title: 'Apakah kamu yakin?',
+            text: "Ingin menghapus data tersebut!",
+            type: 'warning',
+            buttons: {
+                confirm: {
+                    text: 'Hapus',
+                    className: 'btn btn-success'
+                },
+                cancel: {
+                    text: 'Kembali',
+                    visible: true,
+                    className: 'btn btn-danger'
+                }
+            }
+        }).then((Delete) => {
+            if (Delete) {
+
+                $.ajax({
+                    method: "POST",
+                    url: "<?= base_url('Barang/hapus') ?>",
+                    dataType: "json",
+                    data: {
+                        id_barang: id_barang
+                    },
+                    success: function(data) {
+                        if (data.status == 1) {
+                            swal({
+                                title: 'Data Barang',
+                                text: 'Berhasil dihapus',
+                                icon: "success",
+                                buttons: false,
+                                timer: 1500
+                            }).then((result) => {
+                                location.reload();
+                            });;
+                        }
+                    }
+                })
+
+
+            } else {
+                swal.close();
+            }
+        });
+    }
+
     $(document).ready(function() {
         $('#basic-datatables').DataTable();
 
@@ -133,6 +269,79 @@
             }
         });
 
+        $("#form-barang").validate({
+            rules: {
+                nama_brand: {
+                    required: !0
+                },
+            },
+            messages: {
+                nama_brand: 'Tidak boleh kosong',
+            },
+            errorClass: "error",
+            validClass: "valid",
+            submitHandler: function() {
+
+                kode_barang = $("#kode_barang").val();
+                nama_brand = $("#nama_brand").val();
+
+                $.ajax({
+                    method: "POST",
+                    url: "<?= base_url('Barang/tambah') ?>",
+                    dataType: "json",
+                    data: {
+                        nama_brand: nama_brand,
+                        kode_barang: kode_barang
+                    },
+                    success: function(data) {
+                        if (data.status == 1) {
+                            $("#barangModal").hide();
+                            swall('Ditambah')
+                        }
+
+                    }
+                })
+
+            }
+        })
+
+        $("#form-barang-edit").validate({
+            rules: {
+                nama_brand_edit: {
+                    required: !0
+                },
+            },
+            messages: {
+                nama_brand_edit: 'Tidak boleh kosong',
+            },
+            errorClass: "error",
+            validClass: "valid",
+            submitHandler: function() {
+
+                id_barang_edit = $("#id_barang_edit").val();
+                kode_barang_edit = $("#kode_barang_edit").val();
+                nama_brand_edit = $("#nama_brand_edit").val();
+
+                $.ajax({
+                    method: "POST",
+                    url: "<?= base_url('Barang/ubah_data') ?>",
+                    dataType: "json",
+                    data: {
+                        id_barang_edit: id_barang_edit,
+                        nama_brand_edit: nama_brand_edit,
+                        kode_barang_edit: kode_barang_edit
+                    },
+                    success: function(data) {
+                        if (data.status == 1) {
+                            $("#barangModal_edit").hide();
+                            swall('Diubah')
+                        }
+
+                    }
+                })
+
+            }
+        })
 
     })
 </script>

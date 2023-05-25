@@ -6,7 +6,7 @@
                     <div class="card-header">
                         <div class="d-flex align-items-center">
                             <h4 class="card-title"><?= $title; ?></h4>
-                            <button class="btn btn-primary btn-round ml-auto" data-toggle="modal" data-target="#addRowModal">
+                            <button class="btn btn-primary btn-round ml-auto" data-toggle="modal" data-target="#penyimpananModal">
                                 <i class="fa fa-plus"></i>
                                 Tambah Data
                             </button>
@@ -37,22 +37,54 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Nama Barang</th>
+                                        <th>Nama Brand</th>
                                         <th>Rak</th>
-                                        <th>Kapasitas</th>
+                                        <th>Terisi</th>
+                                        <th>Sisa</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tfoot>
                                     <tr>
                                         <th>No</th>
-                                        <th>Nama Barang</th>
+                                        <th>Nama Brand</th>
                                         <th>Rak</th>
-                                        <th>Kapasitas</th>
+                                        <th>Terisi</th>
+                                        <th>Sisa</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </tfoot>
-                                <tbody></tbody>
+                                <tbody>
+                                    <?php
+
+                                    $no = 0;
+                                    foreach ($penyimpanan as $key => $value) { ?>
+                                        <tr>
+                                            <td><?= $no++; ?></td>
+                                            <td><?= $value['nama_brand'] ?></td>
+                                            <td><?= $value['kode_rak'] ?></td>
+                                            <td><?= $value['terisi'] ?></td>
+                                            <td><?= $value['sisa'] ?></td>
+                                            <td>
+                                                <button data-toggle="modal" data-target="#penyimpananModal_edit" onclick="edit(<?= $value['id_penyimpanan'] ?>)" class="btn btn-info btn-border btn-sm">
+                                                    <span class="btn-label">
+                                                        <i class="fas fa-pencil-alt"></i>
+                                                    </span>
+                                                </button>
+
+                                                <button onclick="Hapus(<?= $value['id_penyimpanan'] ?>)" class="btn btn-danger btn-border btn-sm">
+                                                    <span class="btn-label">
+                                                        <i class="fa fa-trash"></i>
+                                                    </span>
+                                                </button>
+                                            </td>
+                                        </tr>
+
+                                    <?php
+                                    }
+
+                                    ?>
+                                </tbody>
                             </table>
                         </div>
                     </div>
@@ -63,54 +95,108 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="addRowModal" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" id="penyimpananModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header no-bd">
                 <h5 class="modal-title">
-                    <span class="fw-mediumbold">
-                        New</span>
-                    <span class="fw-light">
-                        Row
-                    </span>
+                    Form Tambah
                 </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <p class="small">Create a new row using this form, make sure you fill them all</p>
-                <form>
+                <form id="form-penyimpanan">
                     <div class="row">
                         <div class="col-sm-12">
-                            <div class="form-group form-group-default">
-                                <label>Name</label>
-                                <input id="addName" type="text" class="form-control" placeholder="fill name">
+                            <div class="form-group">
+                                <label>Nama Brand</label>
+                                <select class="form-control" id="id_persediaan" name="id_persediaan">
+                                    <option value="">Pilih brand</option>
+                                    <?php
+                                    foreach ($persediaan as $key => $value) { ?>
+                                        <option value="<?= $value['id_persediaan']; ?>"><?= $value['nama_brand']; ?></option>
+
+                                    <?php
+                                    }
+                                    ?>
+                                </select>
                             </div>
                         </div>
-                        <div class="col-md-6 pr-0">
-                            <div class="form-group form-group-default">
-                                <label>Position</label>
-                                <input id="addPosition" type="text" class="form-control" placeholder="fill position">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>Jumlah Stok </label>
+                                <input type="text" class="form-control" id="jumlah_stok" name="jumlah_stok" readonly>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group form-group-default">
-                                <label>Office</label>
-                                <input id="addOffice" type="text" class="form-control" placeholder="fill office">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>Kode Rak</label>
+                                <select class="form-control" id="id_rak" name="id_rak">
+                                    <option value="">Pilih rak</option>
+                                    <?php
+                                    foreach ($rak as $key => $value) { ?>
+                                        <option value="<?= $value['id_rak']; ?>"><?= $value['kode_rak']; ?></option>
+
+                                    <?php
+                                    }
+                                    ?>
+                                </select>
                             </div>
                         </div>
+
                     </div>
-                </form>
+
             </div>
             <div class="modal-footer no-bd">
-                <button type="button" id="addRowButton" class="btn btn-primary">Add</button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Tambah</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Kembali</button>
             </div>
+            </form>
         </div>
     </div>
 </div>
 <script>
+    function swall(params) {
+        swal({
+            title: 'Berhasil',
+            text: ' ' + params,
+            icon: "success",
+            buttons: false,
+            timer: 1500
+        }).then((result) => {
+            location.reload();
+        });
+    }
+    // $('#id_rak').click(function() {
+
+    //     $.ajax({
+    //         method: 'POST',
+    //         url: '<?= base_url('Persediaan/sisa_kapasitas') ?>',
+    //         data: {
+    //             id_rak: $(this).val()
+    //         },
+    //         dataType: 'json',
+    //         success: function(data) {
+    //             $('#sisa_kapasitas').text(data.sisa_kapasitas)
+    //         }
+    //     })
+    // })
+    $("#id_persediaan").click(function() {
+        $.ajax({
+            method: 'POST',
+            url: '<?= base_url('Penyimpanan/jumlah_stok') ?>',
+            data: {
+                id_persediaan: $(this).val()
+            },
+            dataType: 'json',
+            success: function(data) {
+                $('#jumlah_stok').val(data.jumlah_stok)
+            }
+        })
+    })
+
     $(document).ready(function() {
         $('#basic-datatables').DataTable();
 
@@ -137,6 +223,49 @@
                 });
             }
         });
+
+        $("#form-penyimpanan").validate({
+            rules: {
+                id_persediaan: {
+                    required: !0
+                },
+                id_rak: {
+                    required: !0
+                },
+            },
+            messages: {
+                id_persediaan: 'Belum dipilih',
+                id_rak: 'Belum dipilih',
+
+
+            },
+            errorClass: "error",
+            validClass: "valid",
+            submitHandler: function() {
+                id_persediaan = $("#id_persediaan").val();
+                id_rak = $("#id_rak").val();
+                jumlah_stok = $("#jumlah_stok").val();
+
+                $.ajax({
+                    method: "POST",
+                    url: "<?= base_url('Penyimpanan/tambah') ?>",
+                    dataType: "json",
+                    data: {
+                        id_persediaan: id_persediaan,
+                        id_rak: id_rak,
+                        jumlah_stok: jumlah_stok
+                    },
+                    success: function(data) {
+                        if (data.status == 1) {
+                            $("#penyimpananModal").hide();
+                            swall('Ditambah')
+                        }
+
+                    }
+                })
+
+            }
+        })
 
 
     })
