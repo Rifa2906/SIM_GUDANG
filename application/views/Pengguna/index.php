@@ -107,9 +107,9 @@
                                 <select class="form-control form-control" id="role" name="role">
                                     <option value="">Please select</option>
                                     <option>Administrator</option>
-                                    <option>Kepala Gudang</option>
-                                    <option>Kepala Produksi</option>
-                                    <option>Staf Gudang</option>
+                                    <option>Petugas Gudang</option>
+                                    <option>Manajer Operasional</option>
+                                    <option>Karyawan Gudang</option>
                                 </select>
                             </div>
                         </div>
