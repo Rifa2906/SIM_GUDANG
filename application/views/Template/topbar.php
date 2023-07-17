@@ -1,8 +1,8 @@
   <!-- Logo Header -->
   <div class="logo-header" data-background-color="blue">
 
-      <a href="index.html" class="logo text-center">
-          <h3 class="mt-3 text-white">Industri Hilir Teh</h3>
+      <a href="<?= base_url('Dashboard'); ?>" class="logo text-center">
+          <img class="mb-3" style="margin-left: 90%;" src="<?= base_url('assets/logo/logo-topbar.png'); ?>" width="50" height="50">
       </a>
       <button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse" data-target="collapse" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon">

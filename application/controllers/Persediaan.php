@@ -15,11 +15,11 @@ class Persediaan extends CI_Controller
 
     public function index()
     {
-        $data['title'] = 'Persediaan';
+        $data['title'] = 'Gudang';
         $data['barang'] = $this->M_barang->tampil();
         $data['persediaan'] = $this->M_persediaan->tampil();
         $data['rak'] = $this->M_rak->tampil();
-        $this->load->view('Template/header');
+        $this->load->view('Template/header', $data);
         $this->load->view('Template/topbar');
         $this->load->view('Template/sidebar');
         $this->load->view('Persediaan/index', $data);

@@ -8,15 +8,17 @@ class Barang extends CI_Controller
     {
         parent::__construct();
         $this->load->model('M_barang');
+        $this->load->model('M_rak');
     }
 
 
     public function index()
     {
-        $data['title'] = 'Barang';
+        $data['title'] = 'Produk';
         $data['kode_b'] = $this->kode_otomatis();
         $data['barang'] = $this->M_barang->tampil();
-        $this->load->view('Template/header');
+        $data['rak'] = $this->M_rak->tampil();
+        $this->load->view('Template/header', $data);
         $this->load->view('Template/topbar');
         $this->load->view('Template/sidebar');
         $this->load->view('Barang/index', $data);
@@ -26,7 +28,7 @@ class Barang extends CI_Controller
     function kode_otomatis()
     {
         $tabel = "tb_barang";
-        $field = "kode_barang";
+        $field = "kode_produk";
 
         $lastkode = $this->M_barang->get_max($tabel, $field);
         //mengambil 4 karakter dari belakang
@@ -40,17 +42,11 @@ class Barang extends CI_Controller
     public function tambah()
     {
 
-        $nama_brand = $this->input->post('nama_brand');
-        $kode_barang = $this->input->post('kode_barang');
 
-        $data = [
-            'kode_barang' => $kode_barang,
-            'nama_brand' => $nama_brand,
-        ];
 
-        $this->db->insert('tb_barang', $data);
-        $response['status'] = 1;
-        echo json_encode($response);
+        $this->M_barang->tambahData();
+        $status = 1;
+        echo json_encode($status);
     }
 
     public function ambil_IdBarang()
@@ -67,26 +63,46 @@ class Barang extends CI_Controller
 
     public function ubah_data()
     {
-        $id_barang = $this->input->post('id_barang_edit');
-        $kode_barang_edit = $this->input->post('kode_barang_edit');
-        $nama_brand_edit = $this->input->post('nama_brand_edit');
-
-        $data = [
-            'kode_barang' => $kode_barang_edit,
-            'nama_brand' => $nama_brand_edit
-        ];
-
-        $this->db->where('id_barang', $id_barang);
-        $this->db->update('tb_barang', $data);
-        $response['status'] = 1;
-        echo json_encode($response);
+        $this->M_barang->ubahData();
+        $status = 1;
+        echo json_encode($status);
     }
 
     public function hapus()
     {
-        $id_barang = $this->input->post('id_barang');
-        $this->db->delete('tb_barang', ['id_barang' => $id_barang]);
-        $response['status'] = 1;
-        echo json_encode($response);
+        $this->M_barang->hapusData();
+        $status = 1;
+        echo json_encode($status);
+    }
+
+
+
+    public function cetak_pdf()
+    {
+        // panggil library yang kita buat sebelumnya yang bernama pdfgenerator
+        $this->load->library('pdfgenerator');
+
+        // title dari pdf
+        $this->data['title_pdf'] = 'Laporan Barang';
+        $this->data['barang'] = $this->M_barang->tampil();
+
+        // filename dari pdf ketika didownload
+        $file_pdf = 'laporan_barang';
+        // setting paper
+        $paper = 'A4';
+        //orientasi paper potrait / landscape
+        $orientation = "portrait";
+
+        $html = $this->load->view('Barang/laporan', $this->data, true);
+
+        // run dompdf
+        $this->pdfgenerator->generate($html, $file_pdf, $paper, $orientation);
+    }
+
+    public function print()
+    {
+        $data['title_print'] = 'Laporan Barang';
+        $data['barang'] = $this->M_barang->tampil();
+        $this->load->view('Barang/print', $data);
     }
 }

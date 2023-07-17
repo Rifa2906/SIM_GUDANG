@@ -165,6 +165,18 @@
     </div>
 </div>
 <script>
+    function error() {
+        swal({
+            title: 'Kode Rak',
+            text: 'Sudah Ada ',
+            icon: "error",
+            buttons: false,
+            timer: 1500
+        }).then((result) => {
+            location.reload();
+        });
+    }
+
     function swall(params) {
         swal({
             title: 'Berhasil',
@@ -220,7 +232,7 @@
                         id_rak: id_rak
                     },
                     success: function(data) {
-                        if (data.status == 1) {
+                        if (data == 1) {
                             swal({
                                 title: 'Data Rak',
                                 text: 'Berhasil dihapus',
@@ -298,12 +310,15 @@
                     dataType: "json",
                     data: {
                         kode_rak: kode_rak,
-                        kapasitas: kapasitas
+                        kapasitas: kapasitas,
                     },
                     success: function(data) {
-                        if (data.status == 1) {
+                        if (data == 1) {
                             $("#rakModal").hide();
                             swall('Ditambah')
+                        } else if (data == 0) {
+                            $("#rakModal").hide();
+                            error();
                         }
 
                     }
@@ -348,7 +363,7 @@
                         kapasitas_edit: kapasitas_edit
                     },
                     success: function(data) {
-                        if (data.status == 1) {
+                        if (data == 1) {
                             $("#rakModal_edit").hide();
                             swall('Diubah')
                         }

@@ -16,7 +16,7 @@ class Pengguna extends CI_Controller
     {
         $data['title'] = 'Pengguna';
         $data['pengguna'] = $this->M_pengguna->tampil();
-        $this->load->view('Template/header');
+        $this->load->view('Template/header', $data);
         $this->load->view('Template/topbar');
         $this->load->view('Template/sidebar');
         $this->load->view('Pengguna/index', $data);
@@ -26,8 +26,8 @@ class Pengguna extends CI_Controller
     public function Profile($id)
     {
         $data['title'] = 'Profile';
-        $user = $this->db->get_where('tb_pengguna', ['id' => $id])->row_array();
-        $this->load->view('Template/header');
+        $data['user'] = $this->db->get_where('tb_pengguna', ['id' => $id])->row_array();
+        $this->load->view('Template/header', $data);
         $this->load->view('Template/topbar');
         $this->load->view('Template/sidebar');
         $this->load->view('Pengguna/profile', $data);
@@ -36,26 +36,9 @@ class Pengguna extends CI_Controller
 
     public function tambah()
     {
-
-        $nama = $this->input->post('nama');
-        $alamat = $this->input->post('alamat');
-        $password = $this->input->post('password');
-        $email = $this->input->post('email');
-        $role = $this->input->post('role');
-        $no_telpon = $this->input->post('no_telpon');
-
-        $data = [
-            'nama' => $nama,
-            'role' => $role,
-            'no_telpon' => $no_telpon,
-            'email' => $email,
-            'password' => password_hash($password, PASSWORD_DEFAULT),
-            'alamat' => $alamat,
-        ];
-
-        $this->db->insert('tb_pengguna', $data);
-        $response['status'] = 1;
-        echo json_encode($response);
+        $this->M_pengguna->tambah_data();
+        $status = 1;
+        echo json_encode($status);
     }
 
     public function ambil_IdPengguna()
@@ -75,32 +58,22 @@ class Pengguna extends CI_Controller
 
     public function ubah_data()
     {
-        $id = $this->input->post('id');
-        $nama_edit = $this->input->post('nama_edit');
-        $email_edit = $this->input->post('email_edit');
-        $alamat_edit = $this->input->post('alamat_edit');
-        $role_edit = $this->input->post('role_edit');
-        $no_telpon_edit = $this->input->post('no_telpon_edit');
-
-        $data = [
-            'nama' => $nama_edit,
-            'role' => $role_edit,
-            'no_telpon' => $no_telpon_edit,
-            'email' => $email_edit,
-            'alamat' => $alamat_edit
-        ];
-
-        $this->db->where('id', $id);
-        $this->db->update('tb_pengguna', $data);
-        $response['status'] = 1;
-        echo json_encode($response);
+        $this->M_pengguna->ubahData();
+        $status = 1;
+        echo json_encode($status);
     }
 
     public function hapus()
     {
-        $id = $this->input->post('id');
-        $this->db->delete('tb_pengguna', ['id' => $id]);
-        $response['status'] = 1;
-        echo json_encode($response);
+        $this->M_pengguna->hapusData();
+        $status = 1;
+        echo json_encode($status);
+    }
+
+    function ubah_password()
+    {
+        $this->M_pengguna->hapusData();
+        $status = 1;
+        echo json_encode($status);
     }
 }

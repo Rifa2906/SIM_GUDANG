@@ -6,7 +6,7 @@
                     <div class="card-header">
                         <div class="d-flex align-items-center">
                             <h4 class="card-title"><?= $title; ?></h4>
-                            <button class="btn btn-primary btn-round ml-auto" data-toggle="modal" data-target="#addRowModal">
+                            <button class="btn btn-primary btn-round ml-auto" data-toggle="modal" data-target="#barang_masukModal">
                                 <i class="fa fa-plus"></i>
                                 Tambah Data
                             </button>
@@ -26,6 +26,12 @@
                                         </span>
                                         Print
                                     </a>
+                                    <a href="<?= base_url('Laporan'); ?>" class="btn btn-info btn-border btn-round btn-sm">
+                                        <span class="btn-label">
+                                            <i class="fa fa-file-alt"></i>
+                                        </span>
+                                        Laporan
+                                    </a>
                                 </div>
                             </div>
 
@@ -38,8 +44,12 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Tanggal Masuk</th>
-                                        <th>Nama Barang</th>
+                                        <th>Produk</th>
                                         <th>Jumlah</th>
+                                        <th>Rak</th>
+                                        <th>Lantai</th>
+                                        <th>Papan</th>
+                                        <th>Tanggal Kadaluarsa</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -47,12 +57,41 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Tanggal Masuk</th>
-                                        <th>Nama Barang</th>
+                                        <th>Produk</th>
                                         <th>Jumlah</th>
+                                        <th>Rak</th>
+                                        <th>Lantai</th>
+                                        <th>Papan</th>
+                                        <th>Tanggal Kadaluarsa</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </tfoot>
-                                <tbody></tbody>
+                                <tbody>
+                                    <?php
+                                    $no = 1;
+                                    foreach ($bm as $key => $value) { ?>
+                                        <tr>
+                                            <td><?= $no++; ?></td>
+                                            <td><?= date('d F Y', strtotime($value['tanggal_masuk'])) ?></td>
+                                            <td><?= $value['nama_produk']; ?></td>
+                                            <td><?= $value['jumlah']; ?></td>
+                                            <td><?= $value['kode_rak']; ?></td>
+                                            <td><?= $value['kode_lantai']; ?></th>
+                                            <td><?= $value['kode_papan']; ?></td>
+                                            <td><?= date('d F Y', strtotime($value['tanggal_kadaluarsa'])) ?></td>
+                                            <td>
+                                                <button onclick="Hapus(<?= $value['id_masuk'] ?>)" class="btn btn-danger btn-border btn-sm">
+                                                    <span class="btn-label">
+                                                        <i class="fas fa-trash"></i>
+                                                    </span>
+                                                </button>
+                                            </td>
+                                        </tr>
+
+                                    <?php
+                                    }
+                                    ?>
+                                </tbody>
                             </table>
                         </div>
                     </div>
@@ -63,55 +102,200 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="addRowModal" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" id="barang_masukModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header no-bd">
                 <h5 class="modal-title">
-                    <span class="fw-mediumbold">
-                        New</span>
-                    <span class="fw-light">
-                        Row
-                    </span>
+                    Form Tambah
                 </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <p class="small">Create a new row using this form, make sure you fill them all</p>
-                <form>
+                <form id="form_barang_masuk">
                     <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Nama Brand</label>
+                                <select name="id_barang" id="id_barang" class="form-control">
+                                    <option value="">Plih Nama Brand</option>
+                                    <?php
+                                    foreach ($barang as $key => $value) { ?>
+                                        <option value="<?= $value['id_barang']; ?>"><?= $value['nama_produk']; ?></option>
+                                    <?php
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Rak</label>
+                                <input type="text" class="form-control" readonly name="kode_rak" id="kode_rak">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Lantai</label>
+                                <input type="text" class="form-control" readonly id="kode_lantai" name="kode_lantai">
+                                <span id="jumlah_kosong"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Papan</label>
+                                <input type="text" class="form-control" readonly id="kode_papan" name="kode_papan">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Tanggal Masuk</label>
+                                <input type="date" class="form-control" name="tanggal_masuk" id="tanggal_masuk">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Tanggal Kadaluarsa</label>
+                                <input type="date" class="form-control" name="tanggal_kadaluarsa" id="tanggal_kadaluarsa">
+                            </div>
+                        </div>
                         <div class="col-sm-12">
-                            <div class="form-group form-group-default">
-                                <label>Name</label>
-                                <input id="addName" type="text" class="form-control" placeholder="fill name">
-                            </div>
-                        </div>
-                        <div class="col-md-6 pr-0">
-                            <div class="form-group form-group-default">
-                                <label>Position</label>
-                                <input id="addPosition" type="text" class="form-control" placeholder="fill position">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group form-group-default">
-                                <label>Office</label>
-                                <input id="addOffice" type="text" class="form-control" placeholder="fill office">
+                            <div class="form-group">
+                                <label>Jumlah</label>
+                                <input type="text" class="form-control" id="jumlah" name="jumlah">
                             </div>
                         </div>
                     </div>
-                </form>
+
             </div>
             <div class="modal-footer no-bd">
-                <button type="button" id="addRowButton" class="btn btn-primary">Add</button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Tambah</button>
+                <button type="button" class="btn btn-danger kembali" data-dismiss="modal">Kembali</button>
             </div>
+            </form>
         </div>
     </div>
 </div>
+
 <script>
+    $("#id_barang").change(function() {
+        $.ajax({
+            method: "POST",
+            url: "<?= base_url('Barang_masuk/kode_lantai_otomatis') ?>",
+            dataType: "json",
+            data: {
+                id_barang: $(this).val()
+            },
+            success: function(data) {
+                $('#kode_rak').val(data['kode_rak']);
+                $('#kode_lantai').val(data['kode_lantai']);
+                $('#jumlah_kosong').text('space kosong : ' + data['jumlah_kosong'] + ' kardus');
+
+                $.ajax({
+                    method: "POST",
+                    url: "<?= base_url('Barang_masuk/kode_papan_otomatis') ?>",
+                    dataType: "json",
+                    data: {
+                        kode_lantai: $("#kode_lantai").val()
+                    },
+                    success: function(data) {
+                        $('#kode_papan').val(data['kode_papan']);
+                    }
+                })
+            }
+        })
+    })
+
+
+
+
+
+
+
+
+
+    $(".close, .kembali").click(function() {
+        $('#id_barang').val('');
+        $('#tanggal_masuk').val('');
+        $('#jumlah').val('');
+        location.reload()
+    })
+
+    function error() {
+        swal({
+            title: 'Kode Papan',
+            text: 'Sudah Ada ',
+            icon: "error",
+            buttons: false,
+            timer: 1500
+        }).then((result) => {
+            location.reload();
+        });
+    }
+
+    function swall(params) {
+        swal({
+            title: 'Berhasil',
+            text: ' ' + params,
+            icon: "success",
+            buttons: false,
+            timer: 1500
+        }).then((result) => {
+            location.reload();
+        });
+    }
+
+    function Hapus(id_masuk) {
+        swal({
+            title: 'Apakah kamu yakin?',
+            text: "Ingin menghapus data tersebut!",
+            type: 'warning',
+            buttons: {
+                confirm: {
+                    text: 'Hapus',
+                    className: 'btn btn-success'
+                },
+                cancel: {
+                    text: 'Kembali',
+                    visible: true,
+                    className: 'btn btn-danger'
+                }
+            }
+        }).then((Delete) => {
+            if (Delete) {
+
+                $.ajax({
+                    method: "POST",
+                    url: "<?= base_url('Barang_masuk/hapus') ?>",
+                    dataType: "json",
+                    data: {
+                        id_masuk: id_masuk
+                    },
+                    success: function(data) {
+                        if (data == 1) {
+                            swal({
+                                title: 'Data Barang Masuk',
+                                text: 'Berhasil dihapus',
+                                icon: "success",
+                                buttons: false,
+                                timer: 1500
+                            }).then((result) => {
+                                location.reload();
+                            });;
+                        }
+                    }
+                })
+
+
+            } else {
+                swal.close();
+            }
+        });
+    }
     $(document).ready(function() {
+
         $('#basic-datatables').DataTable();
 
         $('#multi-filter-select').DataTable({
@@ -138,6 +322,66 @@
             }
         });
 
+        $("#form_barang_masuk").validate({
+            rules: {
+                id_barang: {
+                    required: !0
+                },
+                tanggal_masuk: {
+                    required: !0
+                },
+                tanggal_kadaluarsa: {
+                    required: !0
+                },
+                jumlah: {
+                    required: !0,
+                    number: true
+                },
+            },
+            messages: {
+                tanggal_masuk: 'Tidak boleh kosong',
+                tanggal_kadaluarsa: 'Tidak boleh kosong',
+                id_barang: 'Belum Dipilih',
+                jumlah: {
+                    required: 'Tidak boleh kosong',
+                    number: 'Harus Angka'
+
+                }
+            },
+            errorClass: "error",
+            validClass: "valid",
+            submitHandler: function() {
+
+                id_barang = $("#id_barang").val();
+                kode_lantai = $("#kode_lantai").val();
+                kode_papan = $("#kode_papan").val();
+                tanggal_masuk = $("#tanggal_masuk").val();
+                tanggal_kadaluarsa = $("#tanggal_kadaluarsa").val();
+                jumlah = $("#jumlah").val();
+
+                $.ajax({
+                    method: "POST",
+                    url: "<?= base_url('Barang_masuk/tambah') ?>",
+                    dataType: "json",
+                    data: {
+                        id_barang: id_barang,
+                        tanggal_masuk: tanggal_masuk,
+                        tanggal_kadaluarsa: tanggal_kadaluarsa,
+                        jumlah: jumlah,
+                        kode_lantai: kode_lantai,
+                        kode_papan: kode_papan
+                    },
+                    success: function(data) {
+                        if (data == 1) {
+                            $("#barang_masukModal").hide();
+                            swall('Ditambah')
+                        }
+
+                    }
+                })
+
+            }
+        })
 
     })
 </script>

@@ -15,7 +15,7 @@ class Rak extends CI_Controller
     {
         $data['title'] = 'Rak';
         $data['rak'] = $this->M_rak->tampil();
-        $this->load->view('Template/header');
+        $this->load->view('Template/header', $data);
         $this->load->view('Template/topbar');
         $this->load->view('Template/sidebar');
         $this->load->view('Rak/index', $data);
@@ -25,16 +25,25 @@ class Rak extends CI_Controller
     public function tambah()
     {
 
-        $kapasitas = $this->input->post('kapasitas');
         $kode_rak = $this->input->post('kode_rak');
-        $data = [
-            'kode_rak' => $kode_rak,
-            'kapasitas' => $kapasitas
-        ];
+        $rak = $this->M_rak->tampil();
 
-        $this->db->insert('tb_rak', $data);
-        $response['status'] = 1;
-        echo json_encode($response);
+        if (empty($rak['kode_rak'])) {
+            $this->M_rak->tambahData($kode_rak);
+            $status = 1;
+        } else {
+            foreach ($rak as $key => $value) {
+                if ($kode_rak == $value['kode_rak']) {
+                    $status = 0;
+                    break;
+                } else {
+                    $this->M_rak->tambahData($kode_rak);
+                    $status = 1;
+                    break;
+                }
+            }
+        }
+        echo json_encode($status);
     }
 
     public function ambil_IdRak()
@@ -51,27 +60,15 @@ class Rak extends CI_Controller
 
     public function ubah_data()
     {
-        $id_rak = $this->input->post('id_rak_edit');
-        $kode_rak_edit = $this->input->post('kode_rak_edit');
-        $kapasitas_edit = $this->input->post('kapasitas_edit');
-
-
-        $data = [
-            'kode_rak' => $kode_rak_edit,
-            'kapasitas' => $kapasitas_edit
-        ];
-
-        $this->db->where('id_rak', $id_rak);
-        $this->db->update('tb_rak', $data);
-        $response['status'] = 1;
-        echo json_encode($response);
+        $this->M_rak->ubahData();
+        $status = 1;
+        echo json_encode($status);
     }
 
     public function hapus()
     {
-        $id_rak = $this->input->post('id_rak');
-        $this->db->delete('tb_rak', ['id_rak' => $id_rak]);
-        $response['status'] = 1;
-        echo json_encode($response);
+        $this->M_rak->hapusData();
+        $status = 1;
+        echo json_encode($status);
     }
 }

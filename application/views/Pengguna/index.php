@@ -260,7 +260,7 @@
                         id: id
                     },
                     success: function(data) {
-                        if (data.status == 1) {
+                        if (data == 1) {
                             swal({
                                 title: 'Data Pengguna',
                                 text: 'Berhasil dihapus',
@@ -404,7 +404,7 @@
                         alamat: alamat
                     },
                     success: function(data) {
-                        if (data.status == 1) {
+                        if (data == 1) {
                             $("#penggunaModal").hide();
                             swall('Ditambahkan')
                         }
@@ -474,7 +474,7 @@
 
                     },
                     success: function(data) {
-                        if (data.status == 1) {
+                        if (data == 1) {
                             $("#penggunaModal_edit").hide();
                             swall('Diubah')
                         }

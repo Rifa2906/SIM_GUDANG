@@ -82,6 +82,9 @@
 <script src="<?= base_url('assets'); ?>/assets/js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
 <script src="<?= base_url('assets'); ?>/assets/js/plugin/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js"></script>
 
+<!-- Bootstrap Datepicker -->
+<script src="<?= base_url('assets'); ?>/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+
 <!-- jQuery Scrollbar -->
 <script src="<?= base_url('assets'); ?>/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
 
@@ -135,10 +138,10 @@
     Circles.create({
         id: 'circles-2',
         radius: 45,
-        value: 70,
+        value: <?= $jml_data['brg_masuk'] ?>,
         maxValue: 100,
         width: 7,
-        text: 36,
+        text: <?= $jml_data['brg_masuk'] ?>,
         colors: ['#f1f1f1', '#2BB930'],
         duration: 400,
         wrpClass: 'circles-wrp',
@@ -150,10 +153,10 @@
     Circles.create({
         id: 'circles-3',
         radius: 45,
-        value: 40,
+        value: <?= $jml_data['brg_keluar'] ?>,
         maxValue: 100,
         width: 7,
-        text: 12,
+        text: <?= $jml_data['brg_keluar'] ?>,
         colors: ['#f1f1f1', '#F25961'],
         duration: 400,
         wrpClass: 'circles-wrp',

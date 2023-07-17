@@ -6,10 +6,10 @@
                     <div class="card-header">
                         <div class="d-flex align-items-center">
                             <h4 class="card-title"><?= $title; ?></h4>
-                            <button class="btn btn-primary btn-round ml-auto" data-toggle="modal" data-target="#persediaanModal">
+                            <!-- <button class="btn btn-primary btn-round ml-auto" data-toggle="modal" data-target="#persediaanModal">
                                 <i class="fa fa-plus"></i>
                                 Tambah Data
-                            </button>
+                            </button> -->
                         </div>
                         <div class="card-head-row">
                             <div class="card-title">
@@ -37,17 +37,25 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Nama Brand</th>
-                                        <th>Stok (Dus)</th>
-                                        <th>Aksi</th>
+                                        <th>Kode Produk</th>
+                                        <th>Produk</th>
+                                        <th>Tanggal Masuk</th>
+                                        <th>Tanggal Kadaluarsa</th>
+                                        <th>Rak</th>
+                                        <th>Lantai</th>
+                                        <th>Jumlah</th>
                                     </tr>
                                 </thead>
                                 <tfoot>
                                     <tr>
                                         <th>No</th>
-                                        <th>Nama Brand</th>
-                                        <th>Stok (Dus)</th>
-                                        <th>Aksi</th>
+                                        <th>Kode Produk</th>
+                                        <th>Produk</th>
+                                        <th>Tanggal Masuk</th>
+                                        <th>Tanggal Kadaluarsa</th>
+                                        <th>Kode Rak</th>
+                                        <th>Lantai</th>
+                                        <th>Jumlah</th>
                                     </tr>
                                 </tfoot>
                                 <tbody>
@@ -56,21 +64,13 @@
                                     foreach ($persediaan as $key => $value) { ?>
                                         <tr>
                                             <td><?= $no++; ?></td>
-                                            <td><?= $value['nama_brand']; ?></td>
-                                            <td><?= $value['stok']; ?></td>
-                                            <td>
-                                                <button data-toggle="modal" data-target="#persediaanModal_edit" onclick="edit(<?= $value['id_persediaan'] ?>)" class="btn btn-info btn-border btn-sm">
-                                                    <span class="btn-label">
-                                                        <i class="fas fa-pencil-alt"></i>
-                                                    </span>
-                                                </button>
-
-                                                <button onclick="Hapus(<?= $value['id_persediaan'] ?>)" class="btn btn-danger btn-border btn-sm">
-                                                    <span class="btn-label">
-                                                        <i class="fa fa-trash"></i>
-                                                    </span>
-                                                </button>
-                                            </td>
+                                            <td><?= $value['kode_produk']; ?></td>
+                                            <td><?= $value['nama_produk']; ?></td>
+                                            <td><?= $value['tanggal_masuk']; ?></td>
+                                            <td><?= $value['tanggal_kadaluarsa']; ?></td>
+                                            <td><?= $value['rak']; ?></td>
+                                            <td><?= $value['lantai']; ?></td>
+                                            <td><?= $value['jumlah']; ?></td>
                                         </tr>
 
                                     <?php
@@ -177,7 +177,7 @@
 
             </div>
             <div class="modal-footer no-bd">
-                <button type="submit" class="btn btn-primary">Tambah</button>
+                <button type="submit" class="btn btn-primary">Edit</button>
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Kembali</button>
             </div>
             </form>

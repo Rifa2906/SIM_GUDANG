@@ -3,7 +3,7 @@
 
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Atlantis Lite - Bootstrap 4 Admin Dashboard</title>
+    <title><?= $title; ?></title>
     <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
 
     <!--   Core JS Files   -->
@@ -11,11 +11,13 @@
     <script src="<?= base_url('assets'); ?>/assets/js/core/popper.min.js"></script>
     <script src="<?= base_url('assets'); ?>/assets/js/core/bootstrap.min.js"></script>
 
+    <!-- Bootstrap DatePicker -->
+    <link href="<?= base_url('assets'); ?>/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet">
 
 
     <script src="<?= base_url('assets'); ?>/assets/js/plugin/jquery-validation/jquery.validate.min.js"></script>
 
-    <link rel="icon" href="<?= base_url('assets'); ?>/assets/img/icon.ico" type="image/x-icon" />
+    <link rel="icon" href="<?= base_url('assets/assets/img'); ?>/logo.ico" type="image/x-icon" />
 
     <!-- Fonts and icons -->
     <script src="<?= base_url('assets'); ?>/assets/js/plugin/webfont/webfont.min.js"></script>

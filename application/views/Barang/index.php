@@ -14,17 +14,18 @@
                         <div class="card-head-row">
                             <div class="card-title">
                                 <div class="card-tools mt-3">
-                                    <a href="#" class="btn btn-info btn-border btn-round btn-sm mr-2">
+                                    <a href="<?= base_url('Barang/cetak_pdf'); ?>" target="_BLANK" class="btn btn-info btn-border btn-round btn-sm mr-2">
                                         <span class="btn-label">
                                             <i class="fa fa-file-pdf"></i>
                                         </span>
                                         Export
                                     </a>
-                                    <a href="#" class="btn btn-info btn-border btn-round btn-sm">
+                                    <a href="<?= base_url('Barang/print'); ?>" target="_BLANK" class="btn btn-info btn-border btn-round btn-sm">
                                         <span class="btn-label">
                                             <i class="fa fa-print"></i>
                                         </span>
                                         Print
+                                        </button>
                                     </a>
                                 </div>
                             </div>
@@ -38,7 +39,9 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Kode Barang</th>
-                                        <th>Brand Barang</th>
+                                        <th>Produk</th>
+                                        <th>Kode Rak</th>
+                                        <th>Unit</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -46,7 +49,9 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Kode Barang</th>
-                                        <th>Brand Barang</th>
+                                        <th>Produk</th>
+                                        <th>Kode Rak</th>
+                                        <th>Unit</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </tfoot>
@@ -56,8 +61,10 @@
                                     foreach ($barang as $key => $value) { ?>
                                         <tr>
                                             <td><?= $no++; ?></td>
-                                            <td><?= $value['kode_barang']; ?></td>
-                                            <td><?= $value['nama_brand']; ?></td>
+                                            <td><?= $value['kode_produk']; ?></td>
+                                            <td><?= $value['nama_produk']; ?></td>
+                                            <td><?= $value['kode_rak']; ?></td>
+                                            <td><?= $value['unit_produk']; ?></td>
                                             <td>
                                                 <button data-toggle="modal" data-target="#barangModal_edit" onclick="edit(<?= $value['id_barang'] ?>)" class="btn btn-info btn-border btn-sm">
                                                     <span class="btn-label">
@@ -114,6 +121,21 @@
                                 <input type="text" class="form-control" id="nama_brand" name="nama_brand">
                             </div>
                         </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>Kode Rak</label>
+                                <select class="form-control" name="id_rak" id="id_rak">
+                                    <option value="">Pilih Rak</option>
+                                    <?php
+                                    foreach ($rak as $key => $value) { ?>
+                                        <option value="<?= $value['id_rak']; ?>"><?= $value['kode_rak']; ?></option>
+
+                                    <?php
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
                     </div>
 
             </div>
@@ -152,6 +174,21 @@
                             <div class="form-group">
                                 <label>Nama Brand</label>
                                 <input type="text" class="form-control" id="nama_brand_edit" name="nama_brand_edit">
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>Kode Rak</label>
+                                <select class="form-control" name="id_rak_edit" id="id_rak_edit">
+                                    <option value="">Pilih Rak</option>
+                                    <?php
+                                    foreach ($rak as $key => $value) { ?>
+                                        <option value="<?= $value['id_rak']; ?>"><?= $value['kode_rak']; ?></option>
+
+                                    <?php
+                                    }
+                                    ?>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -221,7 +258,7 @@
                         id_barang: id_barang
                     },
                     success: function(data) {
-                        if (data.status == 1) {
+                        if (data == 1) {
                             swal({
                                 title: 'Data Barang',
                                 text: 'Berhasil dihapus',
@@ -274,9 +311,13 @@
                 nama_brand: {
                     required: !0
                 },
+                id_rak: {
+                    required: !0
+                },
             },
             messages: {
                 nama_brand: 'Tidak boleh kosong',
+                id_rak: 'Tidak boleh kosong',
             },
             errorClass: "error",
             validClass: "valid",
@@ -284,6 +325,7 @@
 
                 kode_barang = $("#kode_barang").val();
                 nama_brand = $("#nama_brand").val();
+                id_rak = $("#id_rak").val();
 
                 $.ajax({
                     method: "POST",
@@ -291,10 +333,11 @@
                     dataType: "json",
                     data: {
                         nama_brand: nama_brand,
+                        id_rak: id_rak,
                         kode_barang: kode_barang
                     },
                     success: function(data) {
-                        if (data.status == 1) {
+                        if (data == 1) {
                             $("#barangModal").hide();
                             swall('Ditambah')
                         }
@@ -332,7 +375,7 @@
                         kode_barang_edit: kode_barang_edit
                     },
                     success: function(data) {
-                        if (data.status == 1) {
+                        if (data == 1) {
                             $("#barangModal_edit").hide();
                             swall('Diubah')
                         }

@@ -32,33 +32,10 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="card full-height">
-                    <div class="card-body">
-                        <div class="card-title">Total Stok</div>
-                        <div class="row py-3">
-                            <div class="col-md-4 d-flex flex-column justify-content-around">
-                                <div>
-                                    <h6 class="fw-bold text-uppercase text-success op-8">Teh Celup</h6>
-                                    <h3 class="fw-bold">30</h3>
-                                </div>
-                                <div>
-                                    <h6 class="fw-bold text-uppercase text-danger op-8">Teh Tubruk</h6>
-                                    <h3 class="fw-bold">40</h3>
-                                </div>
-                            </div>
-                            <div class="col-md-8">
-                                <div id="chart-container">
-                                    <canvas id="totalIncomeChart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
         </div>
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
                         <div class="card-head-row">

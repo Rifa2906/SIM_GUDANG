@@ -51,8 +51,8 @@ class Login extends CI_Controller
                     'email' => $user['email'],
                     'id' => $user['id']
                 ];
-
                 $this->session->set_userdata($data);
+
                 redirect('Dashboard');
             } else {
                 $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
